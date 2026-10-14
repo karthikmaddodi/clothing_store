@@ -1,0 +1,122 @@
+﻿[
+  {
+    "id": "prod_1",
+    "name": "Minimalist Linen Overshirt",
+    "subtitle": "Breathable pure linen overshirt for relaxed layering",
+    "description": "Crafted from 100% sustainable European flax linen. Features dual flap chest pockets, mother-of-pearl buttons, and a relaxed boxy cut suitable for warm summer evenings.",
+    "price": 68.0,
+    "imageUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
+    "category": "Shirts",
+    "rating": 4.8
+  },
+  {
+    "id": "prod_2",
+    "name": "Heavyweight Cotton Hoodie",
+    "subtitle": "450 GSM French terry hoodie with relaxed vintage fit",
+    "description": "Substantial custom-milled heavyweight organic cotton. Garment dyed for deep tonal richness with double-lined hood and sturdy ribbed hems.",
+    "price": 85.0,
+    "imageUrl": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80",
+    "category": "Hoodies",
+    "rating": 4.9
+  },
+  {
+    "id": "prod_3",
+    "name": "Tailored Wool Blend Blazer",
+    "subtitle": "Structured modern blazer with notched lapels",
+    "description": "Italian virgin wool blend woven with subtle stretch. Softly structured shoulder silhouette with interior ticket pocket and functional horn button cuffs.",
+    "price": 145.0,
+    "imageUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+    "category": "Outerwear",
+    "rating": 4.7
+  },
+  {
+    "id": "prod_4",
+    "name": "Raw Denim Selvedge Jeans",
+    "subtitle": "13.5oz Japanese indigo selvedge denim",
+    "description": "Loomed in Kurashiki, Japan on vintage shuttle looms. Classic 5-pocket design with chain-stitched hems, copper hardware, and genuine leather patch.",
+    "price": 110.0,
+    "imageUrl": "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=800&q=80",
+    "category": "Denim",
+    "rating": 4.8
+  },
+  {
+    "id": "prod_5",
+    "name": "Cashmere Crewneck Sweater",
+    "subtitle": "Ultra-soft Mongolian cashmere knit in oatmeal heather",
+    "description": "Spun from Grade-A two-ply cashmere fibers. Delivers exceptional warmth with a featherlight hand feel and timeless ribbed crew collar.",
+    "price": 130.0,
+    "imageUrl": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=80",
+    "category": "Knitwear",
+    "rating": 4.9
+  },
+  {
+    "id": "prod_6",
+    "name": "Classic Pima Cotton Tee",
+    "subtitle": "Silky-smooth staple tee from Peruvian long-staple cotton",
+    "description": "Pre-shrunk Peruvian Pima cotton with double-stitched reinforced collar. Resistant to pilling with an impeccably soft drape.",
+    "price": 34.0,
+    "imageUrl": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+    "category": "T-Shirts",
+    "rating": 4.6
+  },
+  {
+    "id": "prod_7",
+    "name": "Waterproof Storm Trench Coat",
+    "subtitle": "Double-breasted weatherproof trench with storm flap",
+    "description": "Technical cotton-gabardine shell with DWR weatherproofing. Traditional epaulets, belted waist, and deep storm welt pockets for harsh weather elegance.",
+    "price": 195.0,
+    "imageUrl": "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=800&q=80",
+    "category": "Outerwear",
+    "rating": 4.9
+  },
+  {
+    "id": "prod_8",
+    "name": "Pleated Wide-Leg Trousers",
+    "subtitle": "Contemporary high-waisted drape trousers in charcoal",
+    "description": "Flowy wool-viscose blend featuring clean double forward pleats, slanted pockets, and an effortlessly relaxed architectural leg opening.",
+    "price": 92.0,
+    "imageUrl": "https://images.unsplash.com/photo-1479064555552-3ef4979f8908?auto=format&fit=crop&w=800&q=80",
+    "category": "Trousers",
+    "rating": 4.7
+  },
+  {
+    "id": "prod_9",
+    "name": "Suede Harrington Jacket",
+    "subtitle": "Supple genuine goat suede with ribbed hem",
+    "description": "Buttery soft goat suede exterior complemented by silky tartan twill lining. Classic stand collar with double snap closures and sturdy brass zip.",
+    "price": 220.0,
+    "imageUrl": "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=800&q=80",
+    "category": "Outerwear",
+    "rating": 5.0
+  },
+  {
+    "id": "prod_10",
+    "name": "Ribbed Merino Knit Beanie",
+    "subtitle": "Cozy 100% extra-fine merino wool in forest green",
+    "description": "Naturally temperature-regulating merino wool knitted in a chunky 7-gauge fisherman rib. Fold-over brim with subtle woven clip label.",
+    "price": 28.0,
+    "imageUrl": "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=800&q=80",
+    "category": "Accessories",
+    "rating": 4.6
+  },
+  {
+    "id": "prod_11",
+    "name": "Relaxed Utility Cargo Pants",
+    "subtitle": "Durable cotton ripstop with modular utility pockets",
+    "description": "Heavy-duty 100% cotton ripstop fabric with reinforced knee panels. Ergonomic bellows cargo pockets and adjustable drawstring ankle cuffs.",
+    "price": 88.0,
+    "imageUrl": "https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=800&q=80",
+    "category": "Trousers",
+    "rating": 4.8
+  },
+  {
+    "id": "prod_12",
+    "name": "Retro Suede Street Sneakers",
+    "subtitle": "Low-top leather and suede panelled gum sole sneakers",
+    "description": "Premium calfskin leather and suede overlays with cushioned OrthoLite insole and durable vulcanized natural gum rubber tread.",
+    "price": 115.0,
+    "imageUrl": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=800&q=80",
+    "category": "Footwear",
+    "rating": 4.9
+  }
+]
