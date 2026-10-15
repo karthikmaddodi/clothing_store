@@ -4,6 +4,13 @@ A Flutter application developed for the Flutter Developer Technical Assessment. 
 
 ---
 
+## Demo Recording
+
+A screen recording demonstrating the complete application flow (authentication, catalog browsing, watchlist synchronization, cart operations with dynamic total calculations, and simulated payment flow) is available in the repository:
+- [Watch Demo Recording](assets/demo.mp4)
+
+---
+
 ## Architecture Overview
 
 The codebase is structured following Uncle Bob's Clean Architecture pattern with distinct layers and strict inward dependency flow:
