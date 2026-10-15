@@ -1,254 +1,269 @@
-# AURA – Clothing E-Commerce Application
+# Clothing Store E-Commerce Application
 
-A production-ready Flutter e-commerce application developed as part of the **Flutter Developer – Technical Assessment**. The application strictly adheres to **Clean Architecture** principles, **BLoC State Management** (`flutter_bloc`), dedicated **Use Cases**, and the **Repository Pattern** with strongly typed models.
-
----
-
-## 📱 Features & Modules
-
-### 1. Module 1: Authentication & Login
-- Real-time format validation for email (RFC 5322 regex) and password (minimum 6 characters).
-- **Reactive UI**: The "Sign In" button is enabled **only** when both fields satisfy validation criteria.
-- In-memory dummy authentication using predefined credentials:
-  - **Email:** `karthik@clothing.com` | **Password:** `password123`
-  - **Secondary:** `user@example.com` | **Password:** `admin123`
-- Predefined credential helper with a one-tap **Auto Fill** for rapid testing.
-- Comprehensive error handling displaying feedback via SnackBar for invalid credentials.
-- Automatic navigation to the product catalog upon successful authentication.
-
-### 2. Module 2: Product Catalogue
-- Displays 12 premium apparel items (overshirts, hoodies, blazers, raw selvedge denim, trench coats, knitwear, trousers, sneakers).
-- Loads catalog data from a local JSON asset (`assets/data/products.json`).
-- Strongly typed JSON deserialization into immutable models (`ProductModel` extending `ProductEntity`).
-- Reusable `ProductCard` component featuring:
-  - High-resolution apparel imagery with image loading and error fallbacks
-  - Category badges
-  - Product name, subtitle/description, and rating
-  - Currency-formatted price (`$XX.XX`)
-  - Watchlist heart icon button with immediate toggle feedback
-  - Direct "Add to Cart" button with SnackBar action feedback
-- Category filter chips (Outerwear, Shirts, Hoodies, Denim, Knitwear, Trousers, Footwear).
-- Explicit Clean Architecture UI states: Loading (`CircularProgressIndicator`), Success (Product Grid), Empty (`EmptyStateView`), and Error (`ErrorStateView` with retry).
-
-### 3. Module 3: Watchlist / Favourites
-- Dedicated Watchlist screen accessible via Bottom Navigation or top App Bar.
-- Add and remove items from the watchlist with in-memory persistence.
-- **State Synchronization**: Adding/removing from the watchlist instantly reflects on the product listing cards, and vice-versa.
-- Real-time notification badge on the Watchlist bottom navigation bar icon.
-- Direct "Add to Cart" ability from the watchlist screen.
-- Elegant empty state when no items are bookmarked.
-
-### 4. Module 4: Shopping Cart
-- Add items to cart with automatic incrementing of quantities if an item already exists.
-- Dedicated Cart screen featuring:
-  - Quantity steppers (`[- Qty +]`) with dynamic subtotal recalculation
-  - One-tap item removal and complete "Clear Cart" confirmation dialog
-  - Dynamic total amount calculation across all cart items
-  - Real-time badge counter displaying the total item quantity across tabs
-  - Empty cart state with quick navigation back to the shop
-
-### 5. Module 5: Dummy Payment & Checkout
-- "Proceed to Checkout" flow from the shopping cart.
-- Order summary displaying customer details, itemized breakdown, free delivery, and total payable amount.
-- **Simulated Payment Gateway**: "Pay Now" button triggers payment processing with a spinner state.
-- Navigates to a dedicated **Payment Success Screen** displaying:
-  - Generated unique dummy Order ID (e.g., `ORD-849201`)
-  - Amount paid
-  - Transaction timestamp and completed status
-- Automatically clears the cart upon successful payment.
-- "Continue Shopping" button safely redirects back to the catalog root.
+A Flutter application developed for the Flutter Developer Technical Assessment. The project implements a complete e-commerce flow for a clothing brand using Clean Architecture, BLoC state management (`flutter_bloc`), dedicated use cases, and repository abstractions.
 
 ---
 
-## 🏛️ Clean Architecture Structure
+## Architecture Overview
 
-The project follows Uncle Bob's Clean Architecture with strict inward dependency flow:
+The codebase is structured following Uncle Bob's Clean Architecture pattern with distinct layers and strict inward dependency flow:
 
 ```
 Presentation Layer (UI Screens & Reusable Widgets)
-       ↓
-BLoC (Events & States via flutter_bloc)
-       ↓
-Use Cases (Single Responsibility Business Operations)
-       ↓
-Repository Interfaces (Domain Contracts)
-       ↓
-Repository Implementations (Data Layer)
-       ↓
-Local Data Sources (Local JSON Asset / In-Memory Storage)
+       │
+       ▼
+BLoC State Management (Events & States)
+       │
+       ▼
+Domain Layer (Use Cases & Repository Interfaces)
+       │
+       ▼
+Data Layer (Repository Implementations & Data Sources)
+       │
+       ▼
+Local Storage (Local JSON Assets & In-Memory Stores)
 ```
+
+### Layer Responsibilities
+
+1. **Presentation Layer (`lib/presentation/`)**
+   - Contains all UI screens, custom reusable widgets, and BLoC controllers.
+   - UI widgets contain no business logic; they only dispatch events and rebuild based on emitted states.
+   - Handles navigation, validation feedback, and SnackBar alerts.
+
+2. **Domain Layer (`lib/domain/`)**
+   - Independent core business layer containing entities, repository interfaces, and use cases.
+   - Has zero dependencies on Flutter UI frameworks or external data libraries.
+   - Each use case has a single responsibility (e.g., `GetProductsUseCase`, `AddToCartUseCase`).
+
+3. **Data Layer (`lib/data/`)**
+   - Contains repository implementations, data sources, and data models with JSON serialization.
+   - Translates raw data into domain entities.
+   - Product catalog is loaded and parsed from a local JSON file (`assets/data/products.json`).
+   - Cart and Watchlist state are maintained in memory via dedicated local data sources.
+
+4. **Core Layer (`lib/core/`)**
+   - Shared utilities including regex validators, currency formatters, theme configuration, custom failure definitions, and predefined credentials.
+
+---
+
+## Directory Structure
 
 ```
 lib/
 ├── core/
 │   ├── constants/
-│   │   ├── app_colors.dart             # Curated obsidian & warm amber palette
-│   │   └── dummy_credentials.dart      # Predefined demo credentials
+│   │   ├── app_colors.dart
+│   │   └── dummy_credentials.dart
 │   ├── errors/
-│   │   ├── exceptions.dart             # Data layer exceptions
-│   │   └── failures.dart               # Domain level failure abstractions
+│   │   ├── exceptions.dart
+│   │   └── failures.dart
 │   ├── theme/
-│   │   └── app_theme.dart              # Material 3 light theme configuration
+│   │   └── app_theme.dart
 │   ├── usecase/
-│   │   └── usecase.dart                # Generic UseCase<T, Params> contract
+│   │   └── usecase.dart
 │   └── utils/
-│       ├── currency_formatter.dart     # Currency formatting helper ($XX.XX)
-│       └── validators.dart             # Email & password validation logic
+│       ├── currency_formatter.dart
+│       └── validators.dart
 ├── data/
 │   ├── datasources/
 │   │   ├── auth_local_data_source.dart
-│   │   ├── product_local_data_source.dart  # Reads assets/data/products.json
-│   │   ├── cart_local_data_source.dart     # In-memory cart store
-│   │   └── watchlist_local_data_source.dart# In-memory watchlist store
+│   │   ├── cart_local_data_source.dart
+│   │   ├── product_local_data_source.dart
+│   │   └── watchlist_local_data_source.dart
 │   ├── models/
-│   │   ├── user_model.dart
-│   │   ├── product_model.dart          # Strongly typed JSON parser
-│   │   └── cart_item_model.dart
+│   │   ├── cart_item_model.dart
+│   │   ├── product_model.dart
+│   │   └── user_model.dart
 │   └── repositories/
 │       ├── auth_repository_impl.dart
-│       ├── product_repository_impl.dart
-│       ├── watchlist_repository_impl.dart
 │       ├── cart_repository_impl.dart
-│       └── payment_repository_impl.dart
+│       ├── payment_repository_impl.dart
+│       ├── product_repository_impl.dart
+│       └── watchlist_repository_impl.dart
 ├── domain/
 │   ├── entities/
-│   │   ├── user_entity.dart
-│   │   ├── product_entity.dart
 │   │   ├── cart_item_entity.dart
-│   │   └── payment_result_entity.dart
+│   │   ├── payment_result_entity.dart
+│   │   ├── product_entity.dart
+│   │   └── user_entity.dart
 │   ├── repositories/
-│   │   ├── auth_repository.dart        # Abstract contracts
-│   │   ├── product_repository.dart
-│   │   ├── watchlist_repository.dart
+│   │   ├── auth_repository.dart
 │   │   ├── cart_repository.dart
-│   │   └── payment_repository.dart
+│   │   ├── payment_repository.dart
+│   │   ├── product_repository.dart
+│   │   └── watchlist_repository.dart
 │   └── usecases/
 │       ├── auth/
 │       │   └── login_usecase.dart
+│       ├── cart/
+│       │   ├── add_to_cart_usecase.dart
+│       │   ├── clear_cart_usecase.dart
+│       │   ├── get_cart_usecase.dart
+│       │   ├── remove_from_cart_usecase.dart
+│       │   └── update_cart_quantity_usecase.dart
+│       ├── payment/
+│       │   └── process_dummy_payment_usecase.dart
 │       ├── products/
 │       │   └── get_products_usecase.dart
-│       ├── watchlist/
-│       │   ├── get_watchlist_usecase.dart
-│       │   ├── add_to_watchlist_usecase.dart
-│       │   └── remove_from_watchlist_usecase.dart
-│       ├── cart/
-│       │   ├── get_cart_usecase.dart
-│       │   ├── add_to_cart_usecase.dart
-│       │   ├── remove_from_cart_usecase.dart
-│       │   ├── update_cart_quantity_usecase.dart
-│       │   └── clear_cart_usecase.dart
-│       └── payment/
-│           └── process_dummy_payment_usecase.dart
+│       └── watchlist/
+│           ├── add_to_watchlist_usecase.dart
+│           ├── get_watchlist_usecase.dart
+│           └── remove_from_watchlist_usecase.dart
 ├── presentation/
 │   ├── blocs/
-│   │   ├── auth/         # AuthBloc, AuthEvent, AuthState
-│   │   ├── product/      # ProductBloc, ProductEvent, ProductState
-│   │   ├── watchlist/    # WatchlistBloc, WatchlistEvent, WatchlistState
-│   │   ├── cart/         # CartBloc, CartEvent, CartState
-│   │   └── payment/      # PaymentBloc, PaymentEvent, PaymentState
+│   │   ├── auth/
+│   │   ├── cart/
+│   │   ├── payment/
+│   │   ├── product/
+│   │   └── watchlist/
 │   ├── screens/
-│   │   ├── login_screen.dart
-│   │   ├── main_navigation_screen.dart
-│   │   ├── product_listing_screen.dart
-│   │   ├── watchlist_screen.dart
 │   │   ├── cart_screen.dart
 │   │   ├── checkout_screen.dart
-│   │   └── payment_success_screen.dart
+│   │   ├── login_screen.dart
+│   │   ├── main_navigation_screen.dart
+│   │   ├── payment_success_screen.dart
+│   │   ├── product_listing_screen.dart
+│   │   └── watchlist_screen.dart
 │   └── widgets/
-│       ├── product_card.dart
 │       ├── cart_item_tile.dart
 │       ├── custom_button.dart
 │       ├── custom_text_field.dart
 │       ├── empty_state_view.dart
-│       └── error_state_view.dart
-└── main.dart             # Root Dependency Injection & MultiBlocProvider
+│       ├── error_state_view.dart
+│       └── product_card.dart
+└── main.dart
 ```
 
 ---
 
-## ⚡ BLoC Events, States & Use Cases Reference
+## State Management (BLoC)
 
-| Module | BLoC | Events Handled | States Emitted | Use Case Involved |
-| :--- | :--- | :--- | :--- | :--- |
-| **Auth** | `AuthBloc` | `LoginEmailChanged`, `LoginPasswordChanged`, `LoginSubmitted`, `AuthLogoutRequested` | `AuthState` (initial, loading, success, failure) | `LoginUseCase` |
-| **Catalog** | `ProductBloc` | `LoadProducts`, `ToggleProductFavorite`, `UpdateProductsWithFavorites` | `ProductInitial`, `ProductLoading`, `ProductLoaded`, `ProductEmpty`, `ProductError` | `GetProductsUseCase`, `AddToWatchlistUseCase`, `RemoveFromWatchlistUseCase` |
-| **Watchlist** | `WatchlistBloc` | `LoadWatchlist`, `AddToWatchlist`, `RemoveFromWatchlist` | `WatchlistInitial`, `WatchlistLoading`, `WatchlistLoaded`, `WatchlistEmpty`, `WatchlistError` | `GetWatchlistUseCase`, `AddToWatchlistUseCase`, `RemoveFromWatchlistUseCase` |
-| **Cart** | `CartBloc` | `LoadCart`, `AddToCart`, `RemoveFromCart`, `IncreaseQuantity`, `DecreaseQuantity`, `ClearCart` | `CartInitial`, `CartLoading`, `CartLoaded` (with `totalAmount` & `totalItemsCount`), `CartEmpty`, `CartError` | `GetCartUseCase`, `AddToCartUseCase`, `RemoveFromCartUseCase`, `UpdateCartQuantityUseCase`, `ClearCartUseCase` |
-| **Payment** | `PaymentBloc` | `InitiatePayment`, `ResetPayment` | `PaymentInitial`, `PaymentProcessing`, `PaymentSuccess`, `PaymentFailureState` | `ProcessDummyPaymentUseCase` |
+State management is handled using `flutter_bloc` with explicit events and states.
+
+### Summary of Events, States, and Use Cases
+
+| Module | BLoC | Events | Emitted States | Use Case(s) |
+|---|---|---|---|---|
+| **Authentication** | `AuthBloc` | `LoginEmailChanged`<br>`LoginPasswordChanged`<br>`LoginSubmitted`<br>`AuthLogoutRequested` | `AuthState` (tracks email/password validation, loading, success, failure) | `LoginUseCase` |
+| **Product Catalog** | `ProductBloc` | `LoadProducts`<br>`ToggleProductFavorite`<br>`UpdateProductsWithFavorites` | `ProductInitial`<br>`ProductLoading`<br>`ProductLoaded`<br>`ProductEmpty`<br>`ProductError` | `GetProductsUseCase`<br>`AddToWatchlistUseCase`<br>`RemoveFromWatchlistUseCase` |
+| **Watchlist** | `WatchlistBloc` | `LoadWatchlist`<br>`AddToWatchlist`<br>`RemoveFromWatchlist` | `WatchlistInitial`<br>`WatchlistLoading`<br>`WatchlistLoaded`<br>`WatchlistEmpty`<br>`WatchlistError` | `GetWatchlistUseCase`<br>`AddToWatchlistUseCase`<br>`RemoveFromWatchlistUseCase` |
+| **Shopping Cart** | `CartBloc` | `LoadCart`<br>`AddToCart`<br>`RemoveFromCart`<br>`IncreaseQuantity`<br>`DecreaseQuantity`<br>`ClearCart` | `CartInitial`<br>`CartLoading`<br>`CartLoaded`<br>`CartEmpty`<br>`CartError` | `GetCartUseCase`<br>`AddToCartUseCase`<br>`RemoveFromCartUseCase`<br>`UpdateCartQuantityUseCase`<br>`ClearCartUseCase` |
+| **Checkout & Payment** | `PaymentBloc` | `InitiatePayment`<br>`ResetPayment` | `PaymentInitial`<br>`PaymentProcessing`<br>`PaymentSuccess`<br>`PaymentFailureState` | `ProcessDummyPaymentUseCase` |
 
 ---
 
-## 🧪 Unit Tests
+## Implemented Modules
 
-The test suite validates pure business logic without coupling to UI rendering:
+### 1. Login Module
+- Email validation using standard RFC-compliant regex pattern.
+- Password validation enforcing a minimum length of 6 characters.
+- Login button dynamically enables only when both inputs are valid.
+- In-memory validation against predefined credentials.
+- Error SnackBar displayed on incorrect credentials.
+- Includes a quick-fill helper for faster testing during evaluation.
+- Successfully navigates to the main catalog navigation upon login.
 
-1. **Login Validation Tests (`test/core/validators_test.dart`)**
-   - Email format validation against RFC 5322 regex.
-   - Password minimum length enforcement (>= 6 characters).
-   - Predefined credential checking against `DummyCredentials`.
+### 2. Product Listing Module
+- Catalog with 12 apparel products loaded from `assets/data/products.json`.
+- Deserialized into immutable `ProductModel` instances.
+- Reusable `ProductCard` displaying product image, title, category, price, watchlist toggle icon, and "Add to Cart" button.
+- Handles `ProductLoading`, `ProductLoaded`, `ProductEmpty`, and `ProductError` states with retry functionality.
+- Category filtering tabs for outerwear, shirts, hoodies, denim, knitwear, and footwear.
 
-2. **Cart Total Calculation Tests (`test/domain/cart_total_test.dart`)**
-   - Subtotal calculation (`price * quantity`).
-   - Dynamic total amount aggregation across multi-product carts.
-   - Quantity modification impact on totals.
+### 3. Favourite / Watchlist Module
+- Dedicated Watchlist screen listing saved items.
+- Adding or removing items synchronizes across both the Catalog grid and the Watchlist view.
+- Real-time notification badge on the bottom navigation bar.
+- Direct "Add to Cart" capability from the Watchlist.
+- Custom empty state with a shortcut button back to the catalog.
 
-3. **Watchlist & Favourite Synchronization Tests (`test/domain/watchlist_test.dart`)**
-   - Adding a product stores it and marks `isFavorite = true`.
-   - Removing an item updates the repository state.
-   - Querying `isFavorite(productId)` returns accurate boolean state.
+### 4. Shopping Cart Module
+- Real-time quantity adjustment (increment, decrement, remove).
+- Subtotal and total amount dynamically computed across all cart items.
+- Live badge counter on the bottom navigation cart tab showing total item count.
+- Clear Cart action with confirmation dialog.
+- Empty cart state with navigation back to shopping.
 
-4. **CartBloc State Management Tests (`test/presentation/cart_bloc_test.dart`)**
-   - Verifies `CartBloc` emits `CartLoaded` with dynamically calculated total amount and items count when `AddToCart` is dispatched.
-   - Verifies `CartBloc` emits `CartEmpty` when `ClearCart` is dispatched.
+### 5. Checkout & Payment Simulation
+- Navigates from cart to checkout summary.
+- Displays order breakdown (subtotal, shipping, taxes, and total payable amount).
+- Simulated payment processing with progress indicator.
+- Navigates to a Payment Success view displaying a generated Order ID and amount paid.
+- Cart is automatically cleared upon successful payment.
 
-### Running Unit Tests
+---
+
+## Unit Testing
+
+The project includes unit tests focusing on business logic, calculations, and state management:
+
+1. **Login Validation (`test/core/validators_test.dart`)**
+   - Validates proper email formats and rejects invalid strings.
+   - Enforces password length requirements.
+   - Verifies predefined candidate credential matching.
+
+2. **Cart Total Calculation (`test/domain/cart_total_test.dart`)**
+   - Verifies item subtotal calculation (`price * quantity`).
+   - Verifies dynamic total aggregation across multiple items.
+   - Verifies total recalculation after quantity updates.
+
+3. **Watchlist & Synchronization (`test/domain/watchlist_test.dart`)**
+   - Verifies adding a product updates favorite state.
+   - Verifies removing a product clears it from the watchlist repository.
+   - Verifies `isFavorite` lookup accuracy.
+
+4. **Cart BLoC State Management (`test/presentation/cart_bloc_test.dart`)**
+   - Verifies `CartBloc` emits `CartLoaded` with updated dynamic totals on `AddToCart`.
+   - Verifies `CartBloc` transitions to `CartEmpty` when `ClearCart` is dispatched.
+
+### Running the Tests
+
+To run the complete test suite:
+
 ```bash
 flutter test
 ```
-**Result:** 13/13 tests pass (100% success).
 
 ---
 
-## 🚀 Getting Started & Execution Instructions
+## Setup and Running
 
 ### Prerequisites
-- Flutter SDK `^3.13.0` or higher
-- Dart SDK `^3.0.0` or higher
+- Flutter SDK 3.13.0 or higher
+- Dart SDK 3.0.0 or higher
 
-### Steps to Run
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd clothing_store
-   ```
+### Steps
 
-2. **Install dependencies:**
+1. Get dependencies:
    ```bash
    flutter pub get
    ```
 
-3. **Verify static analysis:**
+2. Run static analysis:
    ```bash
    flutter analyze
    ```
 
-4. **Run the test suite:**
+3. Run unit tests:
    ```bash
    flutter test
    ```
 
-5. **Run the application:**
+4. Launch the application:
    ```bash
    flutter run
    ```
 
 ---
 
-## 🔑 Demo Credentials
+## Demo Credentials
 
-| Role | Email | Password |
-| :--- | :--- | :--- |
-| **Primary** | `karthik@clothing.com` | `password123` |
-| **Secondary** | `user@example.com` | `admin123` |
+The following dummy accounts are configured for testing:
 
-*(Note: Tapping the "Auto Fill" button on the login screen automatically populates these credentials).*
+| Email | Password |
+|---|---|
+| `karthik@clothing.com` | `password123` |
+| `user@example.com` | `admin123` |
+
+*(Note: An Auto Fill button is provided on the login screen to quickly populate these values).*
